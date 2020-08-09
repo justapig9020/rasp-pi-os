@@ -1,0 +1,5 @@
+project(kernel8.img)
+
+add_excutable(kernel8.elf
+)
+
