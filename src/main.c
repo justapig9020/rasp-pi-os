@@ -1,17 +1,18 @@
 #include "peripherals/uart.h"
 
-inline void init_devices(void) { init_uart(9600); }
+inline void devices_init(void) { uart_init(); }
 
 void init_kernel(void) {
-    init_devices();
+    // devices_init();
+    uart_init();
 
     uart_write("Hello, world\r\n", sizeof("Hello, world\r\n"));
     while (1) {
         char recv;
         uart_read(&recv, 1);
-        uart_write(recv, 1);
+        uart_write(&recv, 1);
         if (recv == '\r') {
-            uart_write('\n', 1);
+            uart_write("\n", 1);
         }
     }
 }

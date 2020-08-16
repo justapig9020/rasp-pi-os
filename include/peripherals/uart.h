@@ -25,7 +25,7 @@
 
 #define MHZ *1000000
 #define UART_CLK 48 MHZ
-#define BAUD_RATE 115200
+#define BAUD_RATE 9600
 #define BAUD_RATE_DIV ((double)UART_CLK / (BAUD_RATE << 4))
 #define UART_DIV_INT ((unsigned int)BAUD_RATE_DIV)
 #define UART_DIV_BOU ((double)(BAUD_RATE_DIV - UART_DIV_INT) * 64 + 0.5)
