@@ -2,7 +2,8 @@ set(CMAKE_C_FLAGS "-Wall -nostdlib -nostartfiles -ffreestanding -mgeneral-regs-o
 message(CURRENT: ${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_EXE_LINKER_FLAGS -T${CMAKE_CURRENT_SOURCE_DIR}/linker.ld)
 
-file(GLOB srcs RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.c)
+file(GLOB srcs RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.[cS])
+message(${srcs})
 add_executable(kernel8.elf ${srcs})
 message(RUNTIME OUTPUT: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 message(PROJECT SOURCE DIR: ${PROJECT_SOURCE_DIR})

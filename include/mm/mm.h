@@ -7,7 +7,7 @@
 #define PAGE_SIZE (1 << PAGE_SHIFT)
 #define SECTION_SIZE (1 << SECTION_SHIFT)
 
-#define LOW_MEMORY (SECTION_SHIFT << 1)
+#define LOW_MEMORY (1 << SECTION_SHIFT)
 
 // Reference from https://github.com/s-matyukevich/raspberry-pi-os
 #endif

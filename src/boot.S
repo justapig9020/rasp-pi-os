@@ -1,6 +1,6 @@
-#include "mm.h"
+#include "mm/mm.h"
 
-.section ".text.boot"
+.section ".boot.text"
 
 .globl _reset
 _reset:

@@ -34,4 +34,8 @@
 #define GPPUDCLK0 ((reg_t)(GPIO_BASE + 0x98))
 #define GPPUDCLK1 ((reg_t)(GPIO_BASE + 0x9c))
 
+enum GPIO_MODE { INPUT, OUTPUT, ALT5, ALT4, ALT0, ALT1, ALT2, ALT3 };
+void gpio_init(unsigned int, enum GPIO_MODE);
+void gpio_set(unsigned int);
+
 #endif
