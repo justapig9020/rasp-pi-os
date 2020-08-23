@@ -1,6 +1,6 @@
 #include "mm/mm.h"
 
-.section ".boot.text"
+.section ".text.boot"
 
 .globl _reset
 _reset:
@@ -15,9 +15,9 @@ _loop:
 _init_c:
     mov sp, #LOW_MEMORY // init stack
 
-    adr x0, bss_begin
-    adr x1, bss_end
-    sub x1, x1, x0
-    bl bzero
+//    adr x0, bss_begin
+//    adr x1, bss_end
+//    sub x1, x1, x0
+//    bl bzero
     bl init_kernel
     b _loop

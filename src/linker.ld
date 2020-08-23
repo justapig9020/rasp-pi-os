@@ -1,8 +1,8 @@
 SECTIONS
 {
-    .boot.text :
+    .text.boot :
     {
-        *(.boot.text)
+        *(.text.boot)
     }
     .text :
     {

@@ -10,3 +10,10 @@ set(CMAKE_C_LINKER_EXECUTABLE ${tools}/${arm}-ld)
 
 include_directories(include)
 add_subdirectory(src)
+
+#add_custom_command(
+#    TARGET claen
+#    POST_BUILD
+#    COMMAND rm
+#    ${PROJECT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}
+#    )
