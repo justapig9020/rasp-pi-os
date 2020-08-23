@@ -32,10 +32,10 @@ void uart_init(void) {
     unsigned int selector;
 
     selector = *GPFSEL1;
-    selector &= ~(7 << 12); // clean gpio14
-    selector |= 4 << 12;    // set alt0 for gpio14
-    selector &= ~(7 << 15); // clean gpio15
-    selector |= 4 << 15;    // set alt0 for gpio15
+    selector &= ~(7 << 12);
+    selector |= 4 << 12; // set alt0 for gpio14
+    selector &= ~(7 << 15);
+    selector |= 4 << 15; // set alt0 for gpio15
     *GPFSEL1 = selector;
 
     *GPPUD = 0;
@@ -45,8 +45,8 @@ void uart_init(void) {
     *GPPUDCLK0 = 0;
 
     // uart
-    *UART_IBRD = UART_DIV_INT;
-    *UART_FBRD = UART_DIV_BOU;
+    *UART_IBRD = UART_DIV_INT; // set baud rate
+    *UART_FBRD = UART_DIV_BOU; // set baud rate
     *UART_LCRH = (1 << 4) | (3 << 5);
     *UART_CR = (1 | (1 << 8) | (1 << 9));
 }
