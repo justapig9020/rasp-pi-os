@@ -22,14 +22,17 @@ void uart_init(void)
     put32(UART_FBRD, UART_DIV_BOU);
     put32(UART_LCRH, (1 << 4) | (3 << 5));
     put32(UART_CR, (1 | (1 << 8) | (1 << 9)));
-      
-
-
 }
 char uart_getchar()
 {
 
 }
-int uart_read(char*, int);
-int uart_write(char*, int);
+int uart_read(char*, int)
+{
+
+}
+int uart_write(char*, int)
+{
+
+}
 
