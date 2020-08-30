@@ -1,38 +1,54 @@
+#include "peripherals/gpio.h"
 #include "peripherals/uart.h"
 
 void uart_init(void)
 {
     unsigned int selector;
 
-	selector = get32(GPFSEL1);
-	selector &= ~(7<<12);                   // clean gpio14
-	selector |= 4<<12;                      // set alt5 for gpio14
-	selector &= ~(7<<15);                   // clean gpio15
-	selector |= 4<<15;                      // set alt5 for gpio15
-	put32(GPFSEL1,selector);
+    selector = *GPFSEL1;
+    selector &= ~(7 << 12); // clean gpio14
+    selector |= 4 << 12;    // set alt0 for gpio14
+    selector &= ~(7 << 15); // clean gpio15
+    selector |= 3 << 15;    // set alt0 for gpio15
+    *GPFSEL1 = selector;
 
-	put32(GPPUD,0);
-	delay(150);
-	put32(GPPUDCLK0,(1<<14)|(1<<15));
-	delay(150);
-	put32(GPPUDCLK0,0);
+    *GPPUD = 0;
+    delay(150);
+    *GPPUDCLK0 = (1 << 14) | (1 << 15);
+    delay(150);
+    *GPPUDCLK0 = 0;
 
-    //uart 
-    put32(UART_IBRD, UART_DIV_INT); //set baudrate 115200
-    put32(UART_FBRD, UART_DIV_BOU);
-    put32(UART_LCRH, (1 << 4) | (3 << 5));
-    put32(UART_CR, (1 | (1 << 8) | (1 << 9)));
+    // uart
+    *UART_IBRD = UART_DIV_INT;
+    *UART_FBRD = UART_DIV_BOU;
+    *UART_LCRH = (1 << 4) | (3 << 5);
+    *UART_CR = (1 | (1 << 8) | (1 << 9));
 }
+
 char uart_getchar()
 {
-
+    char re;
+    uart_read(&re, 1);
+    return re;
 }
-int uart_read(char*, int)
-{
 
+int uart_read(char* des, int len)
+{
+    int i;
+    for(i = 0; i < len; i++)
+    {
+        while(*UART_FR & (1 << 4));
+        des[i] = *UART_DR & 0Xff;
+    }
+    return i;
 }
-int uart_write(char*, int)
+int uart_write(char* src, int len)
 {
-
+    int i;
+    for(int i = 0; i < len; i++)
+    {
+        while(*UART_FR & (1 << 5));
+        *UART_DR = (*UART_DR & (~0xff)) | src[i];
+    }
 }
 

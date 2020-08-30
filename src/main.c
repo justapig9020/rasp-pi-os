@@ -1,11 +1,13 @@
 #include "peripherals/uart.h"
+#include "peripherals/gpio.h"
+#include <stdint.h>
 
-inline void init_devices(void) { init_uart(9600); }
+static inline void devices_init(void) { uart_init(); }
 
 void init_kernel(void) {
-    init_devices();
-
+    devices_init();
     uart_write("Hello, world\r\n", sizeof("Hello, world\r\n"));
+
     while (1) {
         char recv;
         uart_read(&recv, 1);
