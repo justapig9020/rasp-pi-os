@@ -1,5 +1,7 @@
 *.img
 *.elf
+.gbb*
+peda*
 
 ##### CMake
 CMakeLists.txt.user
