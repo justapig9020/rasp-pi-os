@@ -2,27 +2,32 @@
 #include "peripherals/uart.h"
 #define BUF_SIZE 1024
 
+static char o_buf[BUF_SIZE];
+static unsigned int buf_len;
+
 int abs(int n) {
     return (n ^ (n >> 31)) - (n >> 31);
 } // TEMP, should be place into some math relative library
 
-static char buf[BUF_SIZE];
-static unsigned int buf_len;
-
-void _int_to_str(int n) {
+static int _int_to_str(int n, char buf[]) {
+    static int len;
+    len = 0;
     if (n > 10) {
-        _int_to_str(n / 10);
+        _int_to_str(n / 10, buf);
     }
     register int digit = n % 10;
-    buf[buf_len++] = digit + '0';
+    buf[len++] = digit + '0';
+    return len;
 }
 
-void int_to_str(int n) {
+int int_to_str(int n, char buf[]) {
+    int neg = 0;
     if (n < 0) {
         n = abs(n);
-        buf[buf_len++] = '-';
+        *buf = '-';
+        neg = 1;
     }
-    _int_to_str(n);
+    return _int_to_str(n, buf + neg) + neg;
 }
 
 char hex_to_char(unsigned char h) {
@@ -53,35 +58,38 @@ char hex_to_char(unsigned char h) {
     return hex;
 }
 
-void hex_to_str(unsigned long h) {
+int hex_to_str(unsigned long h, char buf[]) {
+    static int len;
+    len = 0;
     if (h > 0xf) {
-        hex_to_str(h >> 4);
+        hex_to_str(h >> 4, buf);
     }
     register char hex = hex_to_char(h & 0xf);
-    buf[buf_len++] = hex;
+    buf[len++] = hex;
+    return len;
 }
 
-void parse_fmt(char *fmt[], void *arg) {
+static void parse_fmt(char *fmt[], void *arg) {
     switch (**fmt) {
     case 'd':
         *fmt += 1;
-        int_to_str(*(int *)arg);
+        buf_len += int_to_str(*(int *)arg, o_buf + buf_len);
         break;
     case 'x':
         *fmt += 1;
-        hex_to_str(*(unsigned long *)arg);
+        buf_len += hex_to_str(*(unsigned long *)arg, o_buf + buf_len);
         break;
     case 'c':
         *fmt += 1;
-        buf[buf_len++] = *(char *)arg;
+        o_buf[buf_len++] = *(char *)arg;
         if (*(char *)arg == '\r') {
-            buf[buf_len++] = '\n';
+            o_buf[buf_len++] = '\n';
         }
         break;
     }
 }
 
-void parse_fmt_str(char fmt[], va_list args) {
+static void parse_fmt_str(char fmt[], va_list args) {
     while (1) {
         void *next_arg;
         switch (*fmt) {
@@ -95,13 +103,13 @@ void parse_fmt_str(char fmt[], va_list args) {
             break;
         case '\n':
             fmt++;
-            buf[buf_len++] = '\r';
-            buf[buf_len++] = '\n';
+            o_buf[buf_len++] = '\r';
+            o_buf[buf_len++] = '\n';
             break;
         case '\\':
             fmt++;
         default:
-            buf[buf_len++] = *fmt++;
+            o_buf[buf_len++] = *fmt++;
             break;
         }
     }
@@ -113,7 +121,7 @@ int _printf(va_peding_para, char fmt[], ...) {
 
     buf_len = 0;
     parse_fmt_str(fmt, args);
-    uart_write(buf, buf_len);
+    uart_write(o_buf, buf_len);
 
     va_end(args);
     return buf_len;
