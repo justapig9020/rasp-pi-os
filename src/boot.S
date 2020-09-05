@@ -3,6 +3,7 @@
 .section ".text.boot"
 
 .globl _reset
+.globl _init_c
 _reset:
     mrs x0, mpidr_el1
     and x0, x0, #0xFF // seperate processor id

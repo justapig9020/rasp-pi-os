@@ -7,13 +7,17 @@ static inline void devices_init(void) { uart_init(); }
 void init_kernel(void) {
     devices_init();
     uart_write("Hello, world\r\n", sizeof("Hello, world\r\n"));
+    int pre_state = get_el(); 
+    switch_to_el1();
+    int next_state = get_el();
+    //printf("pre_state: %d, next_state: %d", pre_state, next_state);
 
-    while (1) {
-        char recv;
-        uart_read(&recv, 1);
-        uart_write(recv, 1);
-        if (recv == '\r') {
-            uart_write('\n', 1);
-        }
-    }
+    /*while (1) {*/
+        /*char recv;*/
+        /*uart_read(&recv, 1);*/
+        /*uart_write(&recv, 1);*/
+        /*if (recv == '\r') {*/
+            /*uart_write("\n", 1);*/
+        /*}*/
+    /*}*/
 }

@@ -9,7 +9,7 @@ void uart_init(void)
     selector &= ~(7 << 12); // clean gpio14
     selector |= 4 << 12;    // set alt0 for gpio14
     selector &= ~(7 << 15); // clean gpio15
-    selector |= 3 << 15;    // set alt0 for gpio15
+    selector |= 4 << 15;    // set alt0 for gpio15
     *GPFSEL1 = selector;
 
     *GPPUD = 0;
